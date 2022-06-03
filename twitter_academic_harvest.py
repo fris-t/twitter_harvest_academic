@@ -185,7 +185,13 @@ for page in search_results:
             org_account_created_at = tweet["referenced_tweets"][0]["author"]["created_at"]
         except KeyError:
             org_account_created_at = "NA"
-
+        
+        try:
+            org_account_pic = tweet["referenced_tweets"][0]["author"]["profile_image_url"]
+            org_account_pic = str(org_account_pic[0:-10] + "400x400.jpg")
+        except KeyError:
+            org_account_pic = "NA"    
+        
         mentions=[]
         try:
             for mention in tweet["entities"]["mentions"]:
@@ -220,10 +226,16 @@ for page in search_results:
         account_volume = tweet["author"]["public_metrics"]["tweet_count"]
         account_bio = tweet["author"]["description"]
         account_created_at = tweet["author"]["created_at"]
+        
         try:
             account_location = tweet["author"]["location"]
         except:
             account_location = "NA"
+        
+        try:
+            account_pic = str(tweet["author"]["profile_image_url"][0:-10] + "400x400.jpg")
+        except KeyError:
+            account_pic = "NA"
         
 
         #bind together as row for df
@@ -269,13 +281,15 @@ for page in search_results:
             "org_account_volume" : org_account_volume,
             "org_account_bio" : org_account_bio,
             "org_account_created_at" : org_account_created_at,
+            "org_account_pic": org_account_pic,
             "account_username" : account_username,
             "account_followers" : account_followers,
             "account_following" : account_following,
             "account_volume" : account_volume,
             "account_bio" : account_bio,
             "account_created_at" : account_created_at,
-            "account_location" : account_location
+            "account_location" : account_location,
+            "account_pic" : account_pic
         }
 
         df = df.append(tweetdata, ignore_index= True)
